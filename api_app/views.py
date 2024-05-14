@@ -6,18 +6,18 @@ from api_app.models import Book
 from rest_framework.decorators import api_view
 from api_app.serializers import BokModelSerializer, BookSerializer
 
-
 class GetAllData(APIView):
     def get(self, request):
         query = Book.objects.all().order_by('-create_at')
-        serializer = BokModelSerializer(query, many=True)
+        serializer = BokModelSerializer(query, many=True,context={'request': request})
+        #context =آدرس عکسو میزاره درست
         return Response(data={"message" : "loliiiiiiiiiii","data":serializer.data} ,status=status.HTTP_200_OK)
 
 @api_view(['GET'])
 def allApi(request):
     if request.method == 'GET':
         query = Book.objects.all().order_by('-create_at')
-        serializer = BokModelSerializer(query, many=True)
+        serializer = BokModelSerializer(query, many=True,context={'request': request})
         return Response(data={"data":serializer.data} , status=status.HTTP_200_OK)
 
 class GetFaveData(APIView):
@@ -35,9 +35,9 @@ class UpdateFaveData(APIView):
             serializer.save()
             return Response(data=serializer.data, status=status.HTTP_201_CREATED)
         return Response(data=serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-@api_view(['Post'])
-def SetDara(request):
-    if request.method == 'Post':
+@api_view(['POST'])
+def SetData(request):
+    if request.method == 'POST':
         serializer = BokModelSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save()
