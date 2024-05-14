@@ -1,12 +1,15 @@
 from django.shortcuts import render
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from rest_framework import status
+from rest_framework import status, permissions
 from api_app.models import Book
 from rest_framework.decorators import api_view
 from api_app.serializers import BokModelSerializer, BookSerializer
 
+
 class GetAllData(APIView):
+    #پرمیژن تکی در کلاس
+    # permission_classes = [permissions.IsAuthenticated]
     def get(self, request):
         query = Book.objects.all().order_by('-create_at')
         serializer = BokModelSerializer(query, many=True,context={'request': request})
